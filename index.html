@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Game Night Casino 🎰</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Background music & sounds -->
+  <!-- Put your own audio files in /assets and update these paths if needed -->
+  <audio id="bgMusic" src="assets/bg-music.mp3" loop></audio>
+  <audio id="clickSound" src="assets/click.mp3"></audio>
+  <audio id="spinSound" src="assets/spin.mp3"></audio>
+  <audio id="winSound" src="assets/win.mp3"></audio>
+
+  <div class="app">
+
+    <!-- Main heading glow -->
+    <div class="top-glow"></div>
+
+    <!-- SCREEN: MAIN MENU -->
+    <section class="screen screen-menu active" id="screen-menu">
+      <div class="menu-card">
+        <h1 class="logo">Game Night Casino 🎲</h1>
+        <p class="tagline">
+          Step right up! Spin the wheels or play Challenge Bingo to decide your fate…
+        </p>
+
+        <div class="menu-buttons">
+          <button id="btnPlayWheel" class="btn primary big">
+            ▶ Play (Wheel Mode)
+          </button>
+          <button id="btnPlayBingo" class="btn secondary big">
+            🧩 Play Bingo Mode
+          </button>
+        </div>
+
+        <div class="menu-secondary">
+          <button id="btnOpenSettingsFromMenu" class="btn ghost">
+            ⚙ Settings
+          </button>
+          <p class="menu-hint">
+            Tip: Music & sounds start when you first click a button.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN: WHEEL MODE -->
+    <section class="screen screen-wheel" id="screen-wheel">
+      <header class="screen-header">
+        <button id="btnBackFromWheel" class="btn ghost small">⬅ Back to Menu</button>
+        <div class="screen-header-center">
+          <h2>Wheel Mode</h2>
+          <p>First spin: pick a game. Optional second spin: pick a challenge.</p>
+        </div>
+        <button id="btnOpenSettingsFromWheel" class="btn ghost small">
+          ⚙ Settings
+        </button>
+      </header>
+
+      <main class="wheel-layout">
+        <!-- GAME WHEEL -->
+        <section class="wheel-card">
+          <h3 id="gameWheelTitle">What game shalt we play?</h3>
+          <div class="wheel-wrapper">
+            <div class="wheel-pointer"></div>
+            <canvas id="gameWheelCanvas"></canvas>
+          </div>
+          <div class="wheel-actions">
+            <button id="btnSpinGame" class="btn primary">
+              🎡 Spin Game Wheel
+            </button>
+            <div id="gameResultText" class="result-text">
+              Waiting to spin…
+            </div>
+          </div>
+          <div class="vote-panel">
+            <h4>Pokerchip votes (games)</h4>
+            <div id="gameVotesContainer" class="votes-container">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- CHALLENGE WHEEL -->
+        <section class="wheel-card">
+          <h3 id="challengeTitle">Challenge!</h3>
+          <div class="wheel-wrapper">
+            <div class="wheel-pointer"></div>
+            <canvas id="challengeWheelCanvas"></canvas>
+          </div>
+          <div class="wheel-actions">
+            <button id="btnSpinChallenge" class="btn secondary" disabled>
+              🎯 Spin Challenge Wheel
+            </button>
+            <div id="challengeResultText" class="result-text">
+              Pick a game first, then spin for a challenge.
+            </div>
+          </div>
+          <div class="vote-panel">
+            <h4>Pokerchip votes (challenges)</h4>
+            <div id="challengeVotesContainer" class="votes-container">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <!-- SCREEN: BINGO MODE -->
+    <section class="screen screen-bingo" id="screen-bingo">
+      <header class="screen-header">
+        <button id="btnBackFromBingo" class="btn ghost small">⬅ Back to Menu</button>
+        <div class="screen-header-center">
+          <h2>Challenge Bingo</h2>
+          <p>Get a row of completed challenges to win!</p>
+        </div>
+        <button id="btnOpenSettingsFromBingo" class="btn ghost small">
+          ⚙ Settings
+        </button>
+      </header>
+
+      <main class="bingo-layout">
+        <section class="bingo-info">
+          <div class="bingo-panel">
+            <h3>Current Seed</h3>
+            <p id="bingoSeedDisplay">Seed: —</p>
+            <button id="btnCopySeedLink" class="btn secondary small">
+              🔗 Copy link for this card
+            </button>
+          </div>
+
+          <div class="bingo-panel">
+            <h3>How it works</h3>
+            <ol>
+              <li>Card is built from your games & challenges.</li>
+              <li>You get <strong>2 free rerolls</strong> – click any cell to reroll before starting.</li>
+              <li>Click <strong>Start Bingo</strong> when ready.</li>
+              <li>Then click cells as you complete them and try to get a row!</li>
+            </ol>
+          </div>
+
+          <div class="bingo-panel">
+            <h3>Controls</h3>
+            <p id="bingoRerollInfo">Rerolls left: 2</p>
+            <button id="btnStartBingo" class="btn primary">
+              ⭐ Start Bingo
+            </button>
+            <p id="bingoStatusText" class="bingo-status">
+              Reroll cells you don’t like, then press Start Bingo.
+            </p>
+          </div>
+        </section>
+
+        <section class="bingo-card-wrapper">
+          <div id="bingoCard" class="bingo-card">
+            <!-- Filled by JS -->
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <!-- SETTINGS OVERLAY -->
+    <div id="settingsOverlay" class="settings-overlay hidden">
+      <div class="settings-panel">
+        <div class="settings-header">
+          <h2>Settings</h2>
+          <button id="btnCancelSettings" class="btn ghost small">✖</button>
+        </div>
+
+        <div class="settings-content">
+          <section class="settings-section">
+            <h3>Games list</h3>
+            <p>One game per line. This feeds both the main game wheel and Bingo mode.</p>
+            <textarea id="gameListInput"></textarea>
+          </section>
+
+          <section class="settings-section">
+            <h3>Challenges per game</h3>
+            <p>
+              Format: <code>game1(ch1, ch2);game2(ch1, ch2)</code> (all on one or multiple lines).
+              This feeds the Challenge wheel and Bingo mode.
+            </p>
+            <textarea id="challengeConfigInput"></textarea>
+          </section>
+
+          <section class="settings-section settings-toggles">
+            <h3>Options</h3>
+            <label>
+              <input type="checkbox" id="enableGameVoting" checked />
+              Enable pokerchip voting on <strong>game</strong> wheel
+            </label>
+            <label>
+              <input type="checkbox" id="enableChallenges" checked />
+              Enable <strong>challenge</strong> wheel after game selection
+            </label>
+            <label>
+              <input type="checkbox" id="enableChallengeVoting" checked />
+              Enable pokerchip voting on <strong>challenge</strong> wheel
+            </label>
+          </section>
+        </div>
+
+        <div class="settings-footer">
+          <button id="btnResetDefaults" class="btn ghost small">
+            🔄 Reset to defaults
+          </button>
+          <div class="settings-footer-right">
+            <button id="btnSaveSettings" class="btn primary">
+              💾 Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
