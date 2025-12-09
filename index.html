@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Random Name Wheel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Random Name Wheel</h1>
+      <p>Paste names (one per line), then spin the wheel to choose a random name.</p>
+    </header>
+
+    <main>
+      <section class="input-section">
+        <label for="namesInput">Names (one per line):</label>
+        <textarea id="namesInput" placeholder="Alice&#10;Bob&#10;Charlie&#10;..."></textarea>
+        <div class="controls">
+          <button id="spinButton">🎡 Spin the Wheel</button>
+          <button id="shuffleButton" type="button">🔀 Shuffle Names</button>
+          <label class="checkbox-label">
+            <input type="checkbox" id="removeWinnerCheckbox" />
+            Remove winner from list after spin
+          </label>
+        </div>
+      </section>
+
+      <section class="wheel-section">
+        <div class="wheel-container">
+          <canvas id="wheelCanvas" width="500" height="500"></canvas>
+          <div class="pointer"></div>
+        </div>
+        <div id="result" class="result">Waiting to spin...</div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Hosted with GitHub Pages · Made for quick random selection</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
